@@ -1,0 +1,43 @@
+
+.formulario{
+    width: 350px;
+    height: auto;
+    margin: 50px auto;
+    opacity: 0.9;
+
+}
+
+.alert{
+    width: 350px!important;
+    margin: 0px auto;
+}
+
+input{
+    color: #c69500!important;
+}
+
+.tamanho_card {
+    height: 250px;
+
+}
+.card-body img{
+    width: 50px!important;
+    height: 50px!important;
+}
+
+@media (max-width: 500px) {
+    .formulario{
+        width: auto;
+        margin: auto auto;
+        margin-top: 10px;
+    }
+
+    .alert{
+        width: auto!important;
+        margin: auto auto;
+    }
+
+
+}
+
+
