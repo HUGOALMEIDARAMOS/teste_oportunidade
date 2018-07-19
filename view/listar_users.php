@@ -3,6 +3,11 @@ session_start();
 if($_SESSION['logado'] !=1 ){
     header('Location:../index.php');
 }
+
+ require_once ("../controller/usuarioDAO.php");
+$usuarioDAO = new usuarioDAO();
+
+$_SESSION['cod_user'];
 ?>
 
 <!doctype html>
@@ -25,11 +30,40 @@ if($_SESSION['logado'] !=1 ){
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-    <a class="navbar-brand text-left" href="#">Hospital São Domingos</a>
-    <p class="text-light text-right"><a href="?acao=sair">SAIR</a></p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark pt-0  pb-0">
+    <a class="navbar-brand h1 mb-0" href="#">Hospital</a>
+    <div class="collapse navbar-collapse" id="navbarSite">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="perfil_user.php">Visualizar Perfil</a>
+            </li>
+        </ul>
+    </div>
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                <?php
+                    foreach ($usuarioDAO->listarusuarios() as $resultado) {
+                        if( $_SESSION['cod_user'] ==$resultado['us_code']) {
+                             $foto=$resultado['us_foto'];
+
+                      ?>
+                      <img src="<?=$foto;?>" class="rounded-circle" width=50" height="50">
+                      <?php
+                  }}
+                ?>
+                <span class="d-lg-none d-md-block">Some Actions</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="?acao=sair">Sair</a>
+            </div>
+        </li>
+    </ul>
 
 </nav>
+
 
 <div class="container">
     <div class="row ml-2 mr-2 mt-4">
@@ -43,10 +77,23 @@ if($_SESSION['logado'] !=1 ){
                                <th scope="col">Nome</th>
                                <th scope="col">E-mail</th>
                                <th scope="col">Foto</th>
-
                            </tr>
                            </thead>
-                           <tbody></tbody>
+                           <tbody>
+                           <?php
+                           foreach ($usuarioDAO->listarusuarios() as $resultado) {
+                                      $id=$resultado['us_code'];
+                               ?>
+
+                               <tr>
+                                   <td><?=$resultado['us_nome'];?></td>
+                                   <td><?=$resultado['us_email'];?></td>
+                                   <td class="text-center"> <img src="<?=$resultado['us_foto'];?>" class="rounded-circle"> </td>
+                               </tr>
+                               <?php
+                           }
+                           ?>
+                           </tbody>
                        </table>
 
                    </div>

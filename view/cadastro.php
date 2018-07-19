@@ -7,11 +7,16 @@ require_once("../model/usuario.php");
 require_once("../controller/senhaDAO.php");
 require_once("../model/senha.php");
 
-$usuarioDAO = new usuarioDAO();
+
+
+
+$usuarioDAO = new usuarioDAO($_FILES["arquivo"]);
 $senhaDAO = new senhaDAO();
 
 $usuario = new usuario();
 $senha = new senha();
+
+
 
 ?>
 <!doctype html>
@@ -27,131 +32,130 @@ $senha = new senha();
 
     <style>
         body{
-        margin: 0px;
-        padding:0px;
-            background: #8E2DE2;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to bottom, #4A00E0, #8E2DE2);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to bottom, #4A00E0, #8E2DE2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            /* background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);*/
+            background-image: linear-gradient(to right, #37ecba 0%, #72afd3 100%);
+            width: 100%;
+            height: 100%;
+            overflow: auto;
         }
     </style>
 </head>
 <body>
 <div class="container-fluid ">
-    <div class="container">
+
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <?php
-                if(isset($_SESSION['msg'])){
-                    echo $_SESSION['msg'];
-                    unset($_SESSION['msg']);
+                if(isset($_SESSION['msg_cad'])){
+                    echo $_SESSION['msg_cad'];
+                    unset($_SESSION['msg_cad']);
                 }
                 ?>
             </div>
         </div>
 
-        <form class="formulario" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+             <form class="formulario" method="post" enctype="multipart/form-data">
+                  <div class="row ">
+                       <div class="col-sm-12 col-md-12">
+                           <h2 class="text-light text-center">Cadastro de Usúario</h2>
+                       </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                           <div class="form-group ">
+                              <label for="nome">Nome</label>
+                               <input type="text" name="txtnome" class="form-control bg-transparent" id="nome"  placeholder="Digite  seu nome"    required>
+                           </div>
+                      </div>
+                  </div>
 
+                  <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                             <div class="form-group">
+                                 <label for="email">Email</label>
+                                 <input type="email" name="txtemail" class="form-control  bg-transparent" id="email"  placeholder="Digite seu E-mail" required>
+                             </div>
+                        </div>
+                  </div>
 
-            <div class="row ">
-                <div class="col-sm-12 col-md-12">
-                    <h2 class="text-light text-center">Cadastro de Usúario</h2>
-                </div>
-            </div>
-            <div class="row  bg-light mt-md-2 pt-2 rounded-top">
-                 <div class="col-sm-12 col-md-12">
-                      <div class="form-group ">
-                         <label for="nome">Nome</label>
-                         <input type="text" name="txtnome" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="nome"  placeholder="Digite  seu nome"    required>
-
-                     </div>
+                 <div class="row">
+                     <div class="col-sm-12 col-md-12">
+                          <div class="form-group">
+                               <label for="cpf">Cpf</label>
+                               <input type="text" name="txtcpf" class="form-control bg-transparent" id="txtcpf"  minlength="11" maxlength="11" required>
+                           </div>
+                      </div>
                  </div>
-            </div>
 
-            <div class="row bg-light">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="txtemail" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="email"  placeholder="Digite seu E-mail" required>
+                 <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label for="data_nasc">Data Nascimento</label>
+                            <input type="date" name="txtdata_nasc" class="form-control   bg-transparent" id="data_nasc"  required>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="row bg-light">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <label for="cpf">Cpf</label>
-                        <input type="number" name="txtcpf" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="cpf"   required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row bg-light">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <label for="data_nasc">Data Nascimento</label>
-                        <input type="date" name="txtdata_nasc" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="data_nasc"  required>
-                    </div>
-                </div>
-            </div>
+                 </div>
 
 
-            <div class="row bg-light">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input type="password" name="txtsenha" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="txtsenha"  placeholder="Digite seu senha" >
-                    </div>
-                </div>
-            </div>
+                 <div class="row ">
+                      <div class="col-sm-12 col-md-12">
+                           <div class="form-group">
+                               <label for="senha">Senha</label>
+                               <input type="password" name="txtsenha" class="form-control  bg-transparent" id="txtsenha"  placeholder="Digite seu senha" >
+                           </div>
+                      </div>
+                 </div>
 
-            <div class="row bg-light">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <label for="confsenha">Confirmar Senha</label>
-                        <input type="password" name="txtconfsenha" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="confsenha"  placeholder="repita a senha">
-                    </div>
-                </div>
-            </div>
+                 <div class="row">
+                       <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="foto">Selecione arquivo</label>
+                                <input type="file" name="arquivo" class="form-control-file " id="arquivo">
+                            </div>
+                       </div>
+                  </div>
 
-            <div class="row bg-light">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                        <label for="foto">Selecione arquivo</label>
-                        <input type="file" name="txtfoto" class="form-control-file" id="foto">
-                    </div>
-                </div>
-            </div>
+                 <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                           <div class="form-group">
+                              <input type="submit" name="btnSubmit" class="btn btn-warning" value="Cadastrar">
+                            </div>
+                      </div>
+                  </div>
+             </form>
+        </div>
+    </div>
 
-            <div class="row bg-light rounded-bottom">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
-                       <input type="submit" name="btnSubmit" class="btn btn-warning" value="Cadastrar">
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div> <!--container-->
 </div><!--container-fluid-->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="../assets/js/bootstrap.min.js"></script>
 <script src="../assets/js/alerta.js"></script>
+<script src="../assets/js/api.js"></script>
 
 </body>
 </html>
 
 <?php
+
+
 if (isset($_POST['btnSubmit'])){ //isset -> verifica se a variavel existe
     $usuario->setUsNome($_POST['txtnome']);
     $usuario->setUsEmail($_POST['txtemail']);
     $usuario->setUsCpf($_POST['txtcpf']);
     $usuario->setUsDataNasci($_POST['txtdata_nasc']);
-    $usuario->setUsFoto($_POST['txtfoto']);
+    $usuario->setUsFoto($_POST["arquivo"]);
+
 
     if (!$usuarioDAO->consultarEmail($_POST['txtemail'])) {
 
+
         if ($usuarioDAO->cadastrar($usuario)) {
+
+
 
             $codigoUsuario = $usuarioDAO->consultarCodUsuario($_POST['txtemail']);
 
@@ -160,20 +164,19 @@ if (isset($_POST['btnSubmit'])){ //isset -> verifica se a variavel existe
 
             if ($senhaDAO->cadastrar($senha)) {
 
-                $_SESSION['msg'] = "<div class='alert alert-success' role='alert' id='alerta'>Cadastrado com sucesso</>";
-                header('Location:/index.php');
+                echo "<meta HTTP-EQUIV='refresh' CONTENT='3;URL=../index.php'>";
+
 
             } else {
 
-                $_SESSION['msg'] = "<div class='alert alertdanger' role='alert' id='alerta'>Erro  ao cadastrar.</>";
-                header("Location: cadastro.php");
+                $_SESSION['msg_cad'] = "<div class='alert alertdanger' role='alert' id='alerta'>Erro  ao cadastrar.</>";
+                header('Location:cadastro.php');
 
             }
-
         }
     }else{
-        $_SESSION['msg'] = "<div class='alert alert-warning' role='alert' id='alerta'>Email já existe.</>";
-        header("Location: cadastro.php");
+        $_SESSION['msg_cad'] = "<div class='alert alert-warning' role='alert' id='alerta'>Email já existe.></>";
+        header('Location: cadastro.php');
     }
 }
 

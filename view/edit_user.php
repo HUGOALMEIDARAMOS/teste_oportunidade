@@ -3,6 +3,13 @@ session_start();
 if($_SESSION['logado'] !=1 ){
     header('Location:../index.php');
 }
+
+$id = $_GET['id'];
+require_once ("../controller/usuarioDAO.php");
+require_once ("../model/usuario.php");
+$usuarioDAO = new usuarioDAO($_FILES["arquivo"]);
+$usuario = new usuario();
+
 ?>
 
     <!doctype html>
@@ -25,24 +32,59 @@ if($_SESSION['logado'] !=1 ){
     </head>
     <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-        <a class="navbar-brand text-left" href="#">Hospital São Domingos</a>
-        <p class="text-light text-right"><a href="?acao=sair">SAIR</a></p>
+
+    <?php
+    foreach ($usuarioDAO->listarusuarios() as $resultado) {
+    if ($id == $resultado['us_code'] ) {
+       $nome = $resultado['us_nome'];
+       $email = $resultado['us_email'];
+        $foto =  $resultado['us_foto'];
+
+      }
+    }
+    ?>
+    <?php
+    {
+
+    ?>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark pt-0  pb-0">
+        <a class="navbar-brand h1 mb-0" href="#">Hospital</a>
+        <div class="collapse navbar-collapse" id="navbarSite">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="listar_users.php">Listar Usuario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="perfil_user.php">Visualizar Perfil</a>
+                </li>
+            </ul>
+        </div>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="<?= $foto; ?>" class="rounded-circle" width=50" height="50">
+                    <span class="d-lg-none d-md-block">Some Actions</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="?acao=sair">Sair</a>
+                </div>
+            </li>
+        </ul>
 
     </nav>
-    <?php
-    echo $_SESSION['email']; echo "</br>";
-    echo $_SESSION['senha'];
-    ?>
+
+
 
     <div class="container">
         <div class="row ml-2 mr-2 mt-4">
             <div class="col-md-4 ">
                 <div class="card shadow">
-                    <img class="card-img-top" src="../assets/imagens/user.jpg" alt="Minha foto">
+                    <img class="card-img-top" src="<?=$foto;?>" alt="Minha foto">
                     <div class="card-body">
-                        <h5 class="card-title">Hugo Leonardo</h5>
-                        <p class="card-text">hugo.undb@gmail.com.</p>
+                        <h5 class="card-title"><?=$nome;?></h5>
+                        <p class="card-text"><?=$email;?></p>
                     </div>
                 </div>
             </div>
@@ -51,25 +93,42 @@ if($_SESSION['logado'] !=1 ){
                     <div class="col-md-12">
                         <div class="card shadow ">
                             <div class="row align-middle">
-                                <div class="col-md-12">
-                                    <h2>Editar Dados</h2>
-                                    <form class="formulario" method="post" enctype="multipart/form-data">
+                                <div class="col-md-12 pt-3 ">
+                                    <h2 class="text-center">Editar Dados</h2>
+
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <?php
+                                            if(isset($_SESSION['msg'])){
+                                                echo $_SESSION['msg'];
+                                                unset($_SESSION['msg']);
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+
+                                    <form class="formulario_edit" method="post" enctype="multipart/form-data">
+
+                                        <input type="hidden" name="use_id" id="use_id" value="<?php echo $id ;?>">
+
                                         <div class="form-group ">
                                             <label for="nome">Nome</label>
-                                            <input type="text" name="txtnome" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="nome"  placeholder="Digite  seu nome"    required>
+                                            <input type="text" name="txtnome" class="form-control  bg-transparent text-warning"  id="txtnome" value="<?php echo $nome; ?>" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="email" name="txtemail" class="form-control border-top-0 border-left-0 border-right-0 bg-transparent" id="email"  placeholder="Digite seu E-mail" required>
+                                            <input type="email" name="txtemail"   class="form-control  bg-transparent text-warning"   id="txtemail" value="<?php echo $email; ?>" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="foto">Selecione nova foto</label>
-                                            <input type="file" name="txtfoto" class="form-control-file" id="foto">
+                                            <input type="file" name="arquivo" class="form-control-file" id="arquivo" value="<?php echo $foto; ?>">
                                         </div>
+
                                         <div class="form-group">
-                                            <input type="submit" name="btnSubmit" class="btn btn-warning text-dark" value="Alterar dados">
+                                            <input type="submit" name="btnSubmit" class="btn btn-warning text-dark"
+                                                   value="Alterar dados">
                                         </div>
 
                                     </form>
@@ -81,7 +140,9 @@ if($_SESSION['logado'] !=1 ){
                 </div>
 
             </div>
-
+            <?php
+            }
+            ?>
 
 
         </div><!--container-->
@@ -96,6 +157,31 @@ if($_SESSION['logado'] !=1 ){
         <script src="../assets/js/api.js"></script>
     </body>
     </html>
+
+
+<?php
+
+
+if (isset($_POST['btnSubmit'])) { //isset -> verifica se a variavel existe
+
+    $usuario->setUsCode($_POST['use_id']);
+    $usuario->setUsNome($_POST['txtnome']);
+    $usuario->setUsEmail($_POST['txtemail']);
+    $usuario->setUsFoto($_POST["arquivo"]);
+
+
+    if ($usuarioDAO->editar($usuario)) {
+
+         echo "<meta HTTP-EQUIV='refresh' CONTENT='3;URL=perfil_user.php'>";
+
+    }
+    $_SESSION['msg'] = "<div class='alert alert-success' role='alert' id='alerta'>Salvo com sucesso. Redirecionando</div>";
+}
+
+?>
+
+
+
 
 <?php
 if(isset($_GET['acao'])){

@@ -3,6 +3,18 @@ session_start();
   if($_SESSION['logado'] !=1 ){
       header('Location:../index.php');
   }
+
+
+$_SESSION['email'];
+$_SESSION['senha'];
+$_SESSION['cod_user'];
+$_SESSION['foto'];
+
+require_once ("../controller/usuarioDAO.php");
+require_once ("../model/usuario.php");
+$usuarioDAO = new usuarioDAO();
+$usuario = new usuario();
+
 ?>
 
 <!doctype html>
@@ -11,7 +23,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport"   content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cadastro de Usúario</title>
+    <title>:: Perfil do usúario ::</title>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/estilo.css">
 
@@ -25,49 +37,64 @@ session_start();
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-    <a class="navbar-brand text-left" href="#">Hospital São Domingos</a>
-    <p class="text-light text-right"><a href="?acao=sair">SAIR</a></p>
+<?php
+foreach ($usuarioDAO->listarusuarios() as $resultado) {
+    if ($_SESSION['cod_user'] == $resultado['us_code'] ) {
+        $nome = $resultado['us_nome'];
+        $email = $resultado['us_email'];
+        $foto =  $resultado['us_foto'];
+        $id = $_SESSION['cod_user'];
+    }
+}
+
+?>
+<?php
+{
+?>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark pt-0  pb-0">
+    <a class="navbar-brand h1 mb-0" href="#">Hospital</a>
+       <div class="collapse navbar-collapse" id="navbarSite">
+           <ul class="navbar-nav">
+               <li class="nav-item">
+                   <a class="nav-link" href="listar_users.php">Listar Usuario</a>
+               </li>
+           </ul>
+       </div>
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <img src="<?= $foto; ?>" class="rounded-circle" width=50" height="50">
+                    <span class="d-lg-none d-md-block">Some Actions</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="?acao=sair">Sair</a>
+            </div>
+        </li>
+    </ul>
 
 </nav>
-<?php
-echo $_SESSION['email']; echo "</br>";
-echo $_SESSION['senha'];
-?>
+
 
  <div class="container">
     <div class="row ml-2 mr-2 mt-4">
         <div class="col-md-4 ">
             <div class="card shadow">
-                <img class="card-img-top" src="../assets/imagens/user.jpg" alt="Minha foto">
+                <img class="card-img-top" src="<?=$foto;?>" alt="Minha foto">
                 <div class="card-body">
-                    <h5 class="card-title">Hugo Leonardo</h5>
-                    <p class="card-text">hugo.undb@gmail.com.</p>
-                    <a href="edit_user.php" class="btn btn-warning">Alterar Dados</a>
+                    <h5 class="card-title"><?=$nome;?></h5>
+                    <p class="card-text"><?=$email;?></p>
+                    <a href="edit_user.php?id=<?=$id;?>" class="btn btn-warning">Alterar Dados</a>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card shadow tamanho_card">
-                        <div class="row align-middle">
-                            <div class="col-md-6 pt-5 pl-5 text-center ">
-                                <h1 class="font-weight-bold pt-4">OLÁ Dr.</h1>
-                                <h4 class="font-weight-light text-monospace">Hugo Leonardo</h4>
-                            </div>
-                            <div class="col-md-6 pt-5 pl-5">
-                                <img src="../assets/imagens/user.jpg" class="rounded-circle" width="150" height="150">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-2">
+             <div class="row ">
                 <div class="col-md-12">
                     <div class="card shadow ">
                          <div class="card-header">
-                             Lista de pacientes
+                             LISTA DE PACIENTES
                          </div>
                              <div class="card-body">
                                  <table id="alk-table" class="table table-striped table-bordered table-hover table-responsive-sm">
@@ -87,9 +114,9 @@ echo $_SESSION['senha'];
                  </div>
              </div>
     </div>
-
-
-
+        <?php
+        }
+        ?>
  </div><!--container-->
 
 
