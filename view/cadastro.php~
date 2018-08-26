@@ -10,7 +10,7 @@ require_once("../model/senha.php");
 
 
 
-$usuarioDAO = new usuarioDAO();
+$usuarioDAO = new usuarioDAO($_FILES['arquivo']);
 $senhaDAO = new senhaDAO();
 
 $usuario = new usuario();
@@ -118,16 +118,11 @@ $senha = new senha();
                   </div>
 
                  <div class="row">
-                      <div class="col-sm-6 col-md-6">
+                      <div class="col-sm-12 col-md-12">
                            <div class="form-group">
-                              <input type="submit" name="btnSubmit" class="btn btn-warning btn-logar"  value="Cadastrar">
+                              <input type="submit" name="btnSubmit" class="btn btn-warning" value="Cadastrar">
                             </div>
                       </div>
-                        <div class="col-sm-6 col-md-6">
-                    <div class="form-group">
-                        <a href="../index.php" class="btn btn-outline-secondary btn-logar">Logar</a>
-                    </div>
-                </div>
                   </div>
              </form>
         </div>
@@ -152,7 +147,7 @@ if (isset($_POST['btnSubmit'])){ //isset -> verifica se a variavel existe
     $usuario->setUsEmail($_POST['txtemail']);
     $usuario->setUsCpf($_POST['txtcpf']);
     $usuario->setUsDataNasci($_POST['txtdata_nasc']);
-    $usuario->setUsFoto($_FILES['arquivo']);
+   // $usuario->setUsFoto($_POST["arquivo"]);
 
 
     if (!$usuarioDAO->consultarEmail($_POST['txtemail'])) {
@@ -169,12 +164,12 @@ if (isset($_POST['btnSubmit'])){ //isset -> verifica se a variavel existe
 
             if ($senhaDAO->cadastrar($senha)) {
 
-               echo "<meta HTTP-EQUIV='refresh' CONTENT='3;URL=../index.php'>";
-              
+                echo "<meta HTTP-EQUIV='refresh' CONTENT='3;URL=../index.php'>";
+
 
             } else {
 
-                $_SESSION['msg_cad'] = "<div class='alert alert-danger' role='alert' id='alerta'>Erro  ao cadastrar.</>";
+                $_SESSION['msg_cad'] = "<div class='alert alertdanger' role='alert' id='alerta'>Erro  ao cadastrar.</>";
                 header('Location:cadastro.php');
 
             }

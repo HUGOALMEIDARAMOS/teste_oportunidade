@@ -24,9 +24,9 @@ class Conexao {
 
         try{
 
-            $this->user = "root";
+            $this->user = "hugo";
 
-            $this->pass = "hugo2010";
+            $this->pass = "Hug@2010";
 
             $this->host = "localhost";
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if($_SESSION['logado'] !=1 ){
+if(isset($_SESSION['logado']) !=1 ){
     header('Location:../index.php');
 }
 
@@ -167,7 +167,7 @@ if (isset($_POST['btnSubmit'])) { //isset -> verifica se a variavel existe
     $usuario->setUsCode($_POST['use_id']);
     $usuario->setUsNome($_POST['txtnome']);
     $usuario->setUsEmail($_POST['txtemail']);
-    $usuario->setUsFoto($_POST["arquivo"]);
+    $usuario->setUsFoto($_FILES['arquivo']);
 
 
     if ($usuarioDAO->editar($usuario)) {

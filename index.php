@@ -1,15 +1,22 @@
 <?php
+
 session_start();
+
 require_once("./controller/usuarioDAO.php");
 require_once ("./model/usuario.php");
+
 
 $usuarioDAO = new usuarioDAO();
 $usuario = new usuario();
 
 //se o usuario já estiver logado o mesmo é redirecionado para a sua pagina de perfil
-if($_SESSION['logado'] ==1 ){
+
+if(isset($_SESSION['logado']) ==1 ){
     header('Location:view/perfil_user.php');
+
 }
+
+
 
 ?>
 <!doctype html>
